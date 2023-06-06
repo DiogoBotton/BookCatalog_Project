@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Button, MenuItem } from '@mui/material'
 import { AutoStories as AutoStoriesIcon, Menu as MenuIcon } from '@mui/icons-material';
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const pages = ['Lançamentos', 'Catálogo'];
+  const [anchorElNav, setAnchorElNav] = useState(null);
+
+  const pages = [
+    {name: 'Lançamentos', path: '/'},
+    {name: 'Catálogo', path: '/catalog'}];
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -67,8 +70,8 @@ function Header() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu} href={page.path} >
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -98,11 +101,12 @@ function Header() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
+                href={page.path}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>

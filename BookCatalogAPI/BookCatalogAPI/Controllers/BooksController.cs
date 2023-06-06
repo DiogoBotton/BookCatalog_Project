@@ -28,7 +28,7 @@ namespace BookCatalogAPI.Controllers
         {
             try
             {
-                Book newBook = new Book(input.Synopsis, input.Volume, input.Weight, input.AuthorId, input.CategoryBookId);
+                Book newBook = new Book(input.Name, input.Synopsis, input.ImageBase64, input.Volume, input.Weight, input.Price, input.AuthorId, input.CategoryBookId);
 
                 var bookDb = await _bookRepository.CreateAsync(newBook);
 
@@ -52,7 +52,7 @@ namespace BookCatalogAPI.Controllers
                 if(bookDb == null)
                     return StatusCode(404, "Este livro não existe.");
 
-                bookDb.UpdateBook(input.Synopsis, input.Volume, input.Weight, input.AuthorId, input.CategoryBookId);
+                bookDb.UpdateBook(input.Name, input.Synopsis, input.ImageBase64, input.Volume, input.Weight, input.Price, input.AuthorId, input.CategoryBookId);
                 
                 if(!await _bookRepository.UpdateAsync(bookDb))
                     return StatusCode(400, "Ocorreu um erro ao atualizar o livro.");
@@ -75,10 +75,74 @@ namespace BookCatalogAPI.Controllers
                 List<Book> allBooks = await _bookRepository.GetAllAsync();
 
                 var result = allBooks.Select(x => new {
+                    x.Id,
+                    x.Name,
                     x.Synopsis,
                     x.Volume,
                     x.Weight,
                     x.ReleaseDate,
+                    x.Price,
+                    x.ImageBase64,
+                    Author = _authorRepository.GetById(x.AuthorId),
+                    CategoryBook = _categoryBookRepository.GetById(x.CategoryBookId)
+                });
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro interno ao resgatar todos os livros.");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetLastReleases([FromRoute] long id)
+        {
+            try
+            {
+                Book? bookDb = _bookRepository.GetById(id);
+
+                if(bookDb == null)
+                    return StatusCode(404, "Este livro não existe.");
+
+                var result = new
+                {
+                    bookDb.Id,
+                    bookDb.Name,
+                    bookDb.Synopsis,
+                    bookDb.Volume,
+                    bookDb.Weight,
+                    bookDb.ReleaseDate,
+                    bookDb.Price,
+                    bookDb.ImageBase64,
+                    Author = _authorRepository.GetById(bookDb.AuthorId),
+                    CategoryBook = _categoryBookRepository.GetById(bookDb.CategoryBookId)
+                };
+
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro interno ao resgatar todos os livros.");
+            }
+        }
+
+        [HttpGet("lastReleases/{quantity}")]
+        public async Task<IActionResult> GetLastReleases([FromRoute] int quantity)
+        {
+            try
+            {
+                List<Book> allBooks = await _bookRepository.GetLastReleases(quantity);
+
+                var result = allBooks.Select(x => new {
+                    x.Id,
+                    x.Name,
+                    x.Synopsis,
+                    x.Volume,
+                    x.Weight,
+                    x.ReleaseDate,
+                    x.Price,
+                    x.ImageBase64,
                     Author = _authorRepository.GetById(x.AuthorId),
                     CategoryBook = _categoryBookRepository.GetById(x.CategoryBookId)
                 });

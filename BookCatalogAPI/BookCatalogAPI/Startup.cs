@@ -48,6 +48,17 @@ namespace BookCatalogAPI
             services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<ICategoryBookRepository, CategoryBookRepository>();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:5173")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod();
+                                  });
+            });
         }
 
         public void Configure(WebApplication app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
@@ -62,6 +73,8 @@ namespace BookCatalogAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

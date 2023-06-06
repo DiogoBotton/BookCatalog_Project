@@ -16,9 +16,9 @@ namespace BookCatalogAPI_Infraestructure.Repositories
         {
         }
 
-        //public async Task<Book?> GetById(long id)
-        //{
-        //    return await _ctx.Books.FirstOrDefaultAsync(x => x.Id == id);
-        //}
+        public async Task<List<Book>> GetLastReleases(int quantity)
+        {
+            return await _ctx.Books.OrderByDescending(x => x.ReleaseDate).Take(quantity).ToListAsync();
+        }
     }
 }

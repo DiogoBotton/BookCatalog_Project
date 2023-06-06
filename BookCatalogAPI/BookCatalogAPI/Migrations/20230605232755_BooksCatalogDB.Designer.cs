@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookCatalogAPI.Migrations
 {
     [DbContext(typeof(BookCatalogContext))]
-    [Migration("20230604185308_CatalogBooksDB")]
-    partial class CatalogBooksDB
+    [Migration("20230605232755_BooksCatalogDB")]
+    partial class BooksCatalogDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,17 @@ namespace BookCatalogAPI.Migrations
 
                     b.Property<long>("CategoryBookId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("ImageBase64")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");

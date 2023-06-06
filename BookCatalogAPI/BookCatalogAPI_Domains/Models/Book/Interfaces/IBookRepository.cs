@@ -8,6 +8,6 @@ namespace BookCatalogAPI_Domains.Models.Book.Interfaces
 {
     public interface IBookRepository : IRepository<Book>
     {
-        //Task<Book?> GetById(long id);
+        Task<List<Book>> GetLastReleases(int quantity);
     }
 }

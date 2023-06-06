@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header/Header';
 import { Card, CardContent, CardMedia, Typography, CardActionArea, Grid, Container, Paper } from '@mui/material';
 import { Box } from '@mui/material';
@@ -6,9 +6,21 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay, EffectCoverflow, Zoom } from 'swiper';
 import 'swiper/css'
 import styles from '../styles/home.module.css'
+import Footer from '../components/Footer/Footer';
+import api from '../services/api'
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
-    const books = ["Senhor dos aneis", "Hobbit", "Terra", "Hobbit", "Hobbit", "Hobbit", "Hobbit", "Hobbit"]
+    const [books, setBooks] = useState([])
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        api.get('Books/lastReleases/10')
+        .then((data) => {
+            setBooks(data.data)
+        })
+    }, [])
+
     return (
         <div>
             <Header />
@@ -25,7 +37,6 @@ function Home() {
                 <Box sx={{ width: '80%', margin: 'auto' }} p={1}>
                     <Swiper
                         modules={[Navigation, Autoplay, EffectCoverflow, Zoom]}
-
                         slidesPerView={5}
                         grabCursor
                         navigation
@@ -35,19 +46,19 @@ function Home() {
                     >
                         {
                             books.map((book) => (
-                                <SwiperSlide className="slide-item">
+                                <SwiperSlide key={book.id} className="slide-item" onClick={() => navigate(`/book/${book.id}`)}>
                                     <Grid>
-                                        <Card sx={{ maxWidth: 250, backgroundColor: '#222222' }}>
+                                        <Card sx={{ maxWidth: 220, backgroundColor: '#222222' }}>
                                             <CardActionArea>
                                                 <CardMedia
                                                     component="img"
-                                                    height="250"
-                                                    image="https://avatars.githubusercontent.com/u/54954629?v=4"
-                                                    alt="green iguana"
+                                                    height="auto"
+                                                    image={'data:image/jpg;base64,' + book.imageBase64}
+                                                    alt={book.name}
                                                 />
                                                 <CardContent>
-                                                    <Typography textAlign='center' gutterBottom variant="h6" component="div">
-                                                        {book}
+                                                    <Typography textAlign='center' gutterBottom variant="body2" component="div">
+                                                        {book.name}
                                                     </Typography>
                                                 </CardContent>
                                             </CardActionArea>
@@ -59,6 +70,8 @@ function Home() {
                     </Swiper>
                 </Box>
             </Paper>
+
+            <Footer />
         </div>
     )
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookCatalogAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class CatalogBooksDB : Migration
+    public partial class BooksCatalogDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,9 +56,12 @@ namespace BookCatalogAPI.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Synopsis = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageBase64 = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Volume = table.Column<int>(type: "int", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AuthorId = table.Column<long>(type: "bigint", nullable: false),
                     CategoryBookId = table.Column<long>(type: "bigint", nullable: false)
