@@ -1,40 +1,29 @@
-﻿using BookCatalogAPI.ViewModels;
-using BookCatalogAPI_Domains.Models.Author.Interfaces;
+﻿using BookCatalogAPI.Helpers.Utils;
 using BookCatalogAPI_Domains.Models.Book;
-using BookCatalogAPI_Domains.Models.Book.Interfaces;
-using BookCatalogAPI_Domains.Models.CategoryBook.Interfaces;
-using Microsoft.AspNetCore.Http;
+using BookCatalogAPI_Services.Services.BookServices.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookCatalogAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksController : ControllerBase
+    public class BooksController : ControllerBaseAPI
     {
-        private readonly IBookRepository _bookRepository;
-        private readonly IAuthorRepository _authorRepository;
-        private readonly ICategoryBookRepository _categoryBookRepository;
+        private readonly IBookServices _bookServices;
 
-        public BooksController(IBookRepository bookRepository, IAuthorRepository authorRepository, ICategoryBookRepository categoryBookRepository)
+        public BooksController(IBookServices bookServices)
         {
-            _bookRepository = bookRepository;
-            _authorRepository = authorRepository;
-            _categoryBookRepository = categoryBookRepository;
+            _bookServices = bookServices;
         }
 
         [HttpPost("new")]
-        public async Task<IActionResult> Create([FromBody] BookViewModel input)
+        public async Task<IActionResult> Create([FromBody] CreateBookInput input)
         {
             try
             {
-                Book newBook = new Book(input.Name, input.Synopsis, input.ImageBase64, input.Volume, input.Weight, input.Price, input.AuthorId, input.CategoryBookId);
+                var result = await _bookServices.Create(input);
 
-                var bookDb = await _bookRepository.CreateAsync(newBook);
-
-                await _bookRepository.UnitOfWork.SaveDbChanges();
-
-                return Ok(bookDb);
+                return VerifyResponse(result);
             }
             catch (Exception)
             {
@@ -43,23 +32,13 @@ namespace BookCatalogAPI.Controllers
         }
 
         [HttpPut("alter/{id}")]
-        public async Task<IActionResult> Update([FromRoute] long id, [FromBody] BookViewModel input)
+        public async Task<IActionResult> Update([FromRoute] long id, [FromBody] CreateBookInput input)
         {
             try
             {
-                var bookDb = _bookRepository.GetById(id);
+                var result = await _bookServices.Update(id, input);
 
-                if(bookDb == null)
-                    return StatusCode(404, "Este livro não existe.");
-
-                bookDb.UpdateBook(input.Name, input.Synopsis, input.ImageBase64, input.Volume, input.Weight, input.Price, input.AuthorId, input.CategoryBookId);
-                
-                if(!await _bookRepository.UpdateAsync(bookDb))
-                    return StatusCode(400, "Ocorreu um erro ao atualizar o livro.");
-
-                await _bookRepository.UnitOfWork.SaveDbChanges();
-
-                return Ok(bookDb);
+                return VerifyResponse(result);
             }
             catch (Exception)
             {
@@ -72,22 +51,9 @@ namespace BookCatalogAPI.Controllers
         {
             try
             {
-                List<Book> allBooks = await _bookRepository.GetAllAsync();
+                var result = await _bookServices.GetAll();
 
-                var result = allBooks.Select(x => new {
-                    x.Id,
-                    x.Name,
-                    x.Synopsis,
-                    x.Volume,
-                    x.Weight,
-                    x.ReleaseDate,
-                    x.Price,
-                    x.ImageBase64,
-                    Author = _authorRepository.GetById(x.AuthorId),
-                    CategoryBook = _categoryBookRepository.GetById(x.CategoryBookId)
-                });
-
-                return Ok(result);
+                return VerifyResponse(result);
             }
             catch (Exception)
             {
@@ -96,30 +62,13 @@ namespace BookCatalogAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetLastReleases([FromRoute] long id)
+        public IActionResult GetById([FromRoute] long id)
         {
             try
             {
-                Book? bookDb = _bookRepository.GetById(id);
+                var result = _bookServices.GetById(id);
 
-                if(bookDb == null)
-                    return StatusCode(404, "Este livro não existe.");
-
-                var result = new
-                {
-                    bookDb.Id,
-                    bookDb.Name,
-                    bookDb.Synopsis,
-                    bookDb.Volume,
-                    bookDb.Weight,
-                    bookDb.ReleaseDate,
-                    bookDb.Price,
-                    bookDb.ImageBase64,
-                    Author = _authorRepository.GetById(bookDb.AuthorId),
-                    CategoryBook = _categoryBookRepository.GetById(bookDb.CategoryBookId)
-                };
-
-                return Ok(result);
+                return VerifyResponse(result);
             }
             catch (Exception)
             {
@@ -132,22 +81,9 @@ namespace BookCatalogAPI.Controllers
         {
             try
             {
-                List<Book> allBooks = await _bookRepository.GetLastReleases(quantity);
+                var result = await _bookServices.GetLastReleases(quantity);
 
-                var result = allBooks.Select(x => new {
-                    x.Id,
-                    x.Name,
-                    x.Synopsis,
-                    x.Volume,
-                    x.Weight,
-                    x.ReleaseDate,
-                    x.Price,
-                    x.ImageBase64,
-                    Author = _authorRepository.GetById(x.AuthorId),
-                    CategoryBook = _categoryBookRepository.GetById(x.CategoryBookId)
-                });
-
-                return Ok(result);
+                return VerifyResponse(result);
             }
             catch (Exception)
             {

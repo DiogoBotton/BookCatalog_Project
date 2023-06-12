@@ -9,6 +9,14 @@ using BookCatalogAPI_Domains.Models.TypeUser.Interfaces;
 using BookCatalogAPI_Domains.Models.User.Interfaces;
 using BookCatalogAPI_Infraestructure.Contexts;
 using BookCatalogAPI_Infraestructure.Repositories;
+using BookCatalogAPI_Services.Services.AuthorServices;
+using BookCatalogAPI_Services.Services.AuthorServices.Interface;
+using BookCatalogAPI_Services.Services.BookServices;
+using BookCatalogAPI_Services.Services.BookServices.Interface;
+using BookCatalogAPI_Services.Services.CategoryBookServices;
+using BookCatalogAPI_Services.Services.CategoryBookServices.Interface;
+using BookCatalogAPI_Services.Services.UserServices;
+using BookCatalogAPI_Services.Services.UserServices.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -40,6 +48,8 @@ namespace BookCatalogAPI
                 });
             }, ServiceLifetime.Scoped);
 
+            // DI (Dependency Injection)
+            // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITypeUserRepository, TypeUserRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
@@ -48,6 +58,12 @@ namespace BookCatalogAPI
             services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<ICategoryBookRepository, CategoryBookRepository>();
+
+            // Services
+            services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<IBookServices, BookServices>();
+            services.AddScoped<IAuthorServices, AuthorServices>();
+            services.AddScoped<ICategoryBookServices, CategoryBookServices>();
 
             services.AddCors(options =>
             {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookCatalogAPI.ViewModels
+namespace BookCatalogAPI_Domains.Models.Book
 {
-    public class BookViewModel
+    public class CreateBookInput
     {
         [Required]
         public string Name { get; set; }

@@ -1,4 +1,6 @@
-﻿using BookCatalogAPI_Domains.Models.Author.Interfaces;
+﻿using BookCatalogAPI.Helpers.Utils;
+using BookCatalogAPI_Domains.Models.Author.Interfaces;
+using BookCatalogAPI_Services.Services.AuthorServices.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,13 +8,13 @@ namespace BookCatalogAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorsController : ControllerBase
+    public class AuthorsController : ControllerBaseAPI
     {
-        private readonly IAuthorRepository _authorRepository;
+        private readonly IAuthorServices _authorServices;
 
-        public AuthorsController(IAuthorRepository authorRepository)
+        public AuthorsController(IAuthorServices authorServices)
         {
-            _authorRepository = authorRepository;
+            _authorServices = authorServices;
         }
 
         [HttpGet("all")]
@@ -20,7 +22,9 @@ namespace BookCatalogAPI.Controllers
         {
             try
             {
-                return Ok(await _authorRepository.GetAllAsync());
+                var result = await _authorServices.GetAll();
+
+                return VerifyResponse(result);
             }
             catch (Exception)
             {

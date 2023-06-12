@@ -1,4 +1,6 @@
-﻿using BookCatalogAPI_Domains.Models.CategoryBook.Interfaces;
+﻿using BookCatalogAPI.Helpers.Utils;
+using BookCatalogAPI_Domains.Models.CategoryBook.Interfaces;
+using BookCatalogAPI_Services.Services.CategoryBookServices.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,13 +8,13 @@ namespace BookCatalogAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryBooksController : ControllerBase
+    public class CategoryBooksController : ControllerBaseAPI
     {
-        private readonly ICategoryBookRepository _categoryBookRepository;
+        private readonly ICategoryBookServices _categoryServices;
 
-        public CategoryBooksController(ICategoryBookRepository categoryBookRepository)
+        public CategoryBooksController(ICategoryBookServices categoryServices)
         {
-            _categoryBookRepository = categoryBookRepository;
+            _categoryServices = categoryServices;
         }
 
         [HttpGet("all")]
@@ -20,7 +22,9 @@ namespace BookCatalogAPI.Controllers
         {
             try
             {
-                return Ok(await _categoryBookRepository.GetAllAsync());
+                var result = await _categoryServices.GetAll();
+
+                return VerifyResponse(result);
             }
             catch (Exception)
             {
