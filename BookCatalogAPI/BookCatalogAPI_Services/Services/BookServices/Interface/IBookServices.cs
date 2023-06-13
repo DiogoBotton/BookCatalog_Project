@@ -1,4 +1,5 @@
 ﻿using BookCatalogAPI_Domains.Models.Book;
+using BookCatalogAPI_Domains.Models.CategoryBook;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace BookCatalogAPI_Services.Services.BookServices.Interface
         Task<BookReturn> GetAll();
         BookReturn GetById(long id);
         Task<BookReturn> GetLastReleases(int quantity);
+        Task<CategoryBookReturn> CategoryBookGetAll();
     }
 }

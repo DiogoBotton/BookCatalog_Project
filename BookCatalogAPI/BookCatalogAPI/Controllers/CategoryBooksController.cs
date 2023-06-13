@@ -1,6 +1,5 @@
 ﻿using BookCatalogAPI.Helpers.Utils;
-using BookCatalogAPI_Domains.Models.CategoryBook.Interfaces;
-using BookCatalogAPI_Services.Services.CategoryBookServices.Interface;
+using BookCatalogAPI_Services.Services.BookServices.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +9,11 @@ namespace BookCatalogAPI.Controllers
     [ApiController]
     public class CategoryBooksController : ControllerBaseAPI
     {
-        private readonly ICategoryBookServices _categoryServices;
+        private readonly IBookServices _bookServices;
 
-        public CategoryBooksController(ICategoryBookServices categoryServices)
+        public CategoryBooksController(IBookServices bookServices)
         {
-            _categoryServices = categoryServices;
+            _bookServices = bookServices;
         }
 
         [HttpGet("all")]
@@ -22,7 +21,7 @@ namespace BookCatalogAPI.Controllers
         {
             try
             {
-                var result = await _categoryServices.GetAll();
+                var result = await _bookServices.CategoryBookGetAll();
 
                 return VerifyResponse(result);
             }

@@ -2,6 +2,7 @@
 using BookCatalogAPI_Domains.Models.Author.Interfaces;
 using BookCatalogAPI_Domains.Models.Book;
 using BookCatalogAPI_Domains.Models.Book.Interfaces;
+using BookCatalogAPI_Domains.Models.CategoryBook;
 using BookCatalogAPI_Domains.Models.CategoryBook.Interfaces;
 using BookCatalogAPI_Services.Services.BookServices.Interface;
 using System;
@@ -26,6 +27,8 @@ namespace BookCatalogAPI_Services.Services.BookServices
             _authorRepository = authorRepository;
             _categoryBookRepository = categoryBookRepository;
         }
+
+        #region Book
 
         public async Task<UpdateBookReturn> Create(CreateBookInput input)
         {
@@ -184,5 +187,29 @@ namespace BookCatalogAPI_Services.Services.BookServices
                 };
             }
         }
+        #endregion
+
+        #region CategoryBook
+
+        public async Task<CategoryBookReturn> CategoryBookGetAll()
+        {
+            try
+            {
+                var result = await _categoryBookRepository.GetAllAsync();
+
+                return new CategoryBookReturn { Status = true, CategoryBooks = result };
+            }
+            catch (Exception)
+            {
+                return new CategoryBookReturn
+                {
+                    Status = true,
+                    Message = "Houve algum erro ao retornas todos os autores.",
+                    Date = DateTime.Now
+                };
+            }
+        }
+
+        #endregion
     }
 }
