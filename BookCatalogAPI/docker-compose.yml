@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+    bookcatalogapi:
+        #image: bookcatalogapi
+        container_name: book-catalog-api
+        image: ${DOCKER_REGISTRY-}book-catalog-api
+        environment:
+            - PORT=5138
+        ports:
+            - "5138:5138"
+        build:
+            context: .
+            dockerfile: BookCatalogAPI/Dockerfile
+        depends_on:
+            - DockerDb
+        networks:
+            - dockerdb-network
+
+    DockerDb:
+        image: "mcr.microsoft.com/mssql/server:2022-latest"
+        environment:
+            SA_PASSWORD: "Legoshi@123"
+            ACCEPT_EULA: "Y"
+        networks:
+            - dockerdb-network
+
+networks:
+    dockerdb-network:
+        driver: bridge

@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCatalogAPI_Infraestruct
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Services", "4-Services", "{9CF0924C-855A-45DD-A0A5-773ABFAC00BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCatalogAPI_Services", "BookCatalogAPI_Services\BookCatalogAPI_Services.csproj", "{F6846CA7-DA24-4CF2-A46F-4FCE289014EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCatalogAPI_Services", "BookCatalogAPI_Services\BookCatalogAPI_Services.csproj", "{F6846CA7-DA24-4CF2-A46F-4FCE289014EE}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{63298189-3BC1-40C2-A1A1-F98E556F37D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{F6846CA7-DA24-4CF2-A46F-4FCE289014EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6846CA7-DA24-4CF2-A46F-4FCE289014EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6846CA7-DA24-4CF2-A46F-4FCE289014EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63298189-3BC1-40C2-A1A1-F98E556F37D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63298189-3BC1-40C2-A1A1-F98E556F37D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63298189-3BC1-40C2-A1A1-F98E556F37D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63298189-3BC1-40C2-A1A1-F98E556F37D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

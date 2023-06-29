@@ -14,7 +14,11 @@ namespace BookCatalogAPI.Helpers
             {
                 var ctx = serviceScope.ServiceProvider.GetService<BookCatalogContext>();
                 if (ctx != null)
+                {
+                    if(ctx.Database.GetPendingMigrations().Any())
+                        ctx.Database.Migrate();
                     await AddDefaultValuesAsyncDb(ctx);
+                }
             }
         }
 
