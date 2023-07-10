@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+    bookcatalogapi:
+        #image: bookcatalogapi
+        container_name: book-catalog-api
+        image: ${DOCKER_REGISTRY-}book-catalog-api
+        environment:
+            - PORT=5138
+        ports:
+            - "5138:5138"
+        build:
+            context: .
+            dockerfile: BookCatalogAPI/Dockerfile
+        depends_on:
+            - DockerDb
+        networks:
+            - dockerdb-network
+
+    DockerDb:
+        image: "postgres"
+        environment:
+            POSTGRES_USER: postgres_admin
+            POSTGRES_PASSWORD: "Elefante@132"
+        networks:
+            - dockerdb-network
+
+networks:
+    dockerdb-network:
+        driver: bridge
